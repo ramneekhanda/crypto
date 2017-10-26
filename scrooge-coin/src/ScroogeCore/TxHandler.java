@@ -1,5 +1,6 @@
 package ScroogeCore;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TxHandler {
@@ -66,7 +67,11 @@ public class TxHandler {
      * updating the current ScroogeCore.UTXO pool as appropriate.
      */
     public Transaction[] handleTxs(Transaction[] possibleTxs) {
-        // IMPLEMENT THIS
+        ArrayList<Transaction> validTxns = new ArrayList<>();
+        for (Transaction tx: possibleTxs)
+            validTxns.add(tx);
+
+
         return null;
     }
 }

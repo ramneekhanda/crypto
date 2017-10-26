@@ -2,6 +2,11 @@
  * Created by ramneek on 26/10/17.
  */
 
+import ScroogeCore.Crypto;
+import ScroogeCore.Transaction;
+import ScroogeCore.UTXO;
+import ScroogeCore.UTXOPool;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;

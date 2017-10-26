@@ -26,7 +26,9 @@ public class TestMain {
         assert(Crypto.verifySignature(k.getPublic(), plaintext.getBytes(), signature) == true);
     }
 
-    static Transaction createGenesisBlock(double val) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    static UTXOPool createPoolWithGenesisBlock(double val) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        UTXOPool pool = new UTXOPool();
+
         PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
         Signature sigInstance = Signature.getInstance("SHA256withRSA");
         sigInstance.initSign(pk);
@@ -43,7 +45,11 @@ public class TestMain {
         System.out.println(transaction.getHash());
 
         assert(Crypto.verifySignature(validPublicKeys.get(0), transaction.getRawDataToSign(0), signature) == true);
-        return transaction;
+
+        UTXO utxo = new UTXO(transaction.getHash(), 0);
+        pool.addUTXO(utxo, transaction.getOutput(0));
+
+        return pool;
     }
 
     static void createTestKeys() throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, SignatureException, InvalidKeyException {
@@ -56,20 +62,8 @@ public class TestMain {
         }
     }
 
-//    static UTXOPool createUTXOPoolWithGenesisBlock() {
-////        UTXOPool utxoPool = new UTXOPool();
-////        UTXO genesisUTXO = new UTXO();
-////        utxoPool.addUTXO();
-//
-//        return utxoPool;
-//    }
-
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException {
-
         createTestKeys();
-        Transaction txG = createGenesisBlock(100.00);
-        UTXOPool pool = new UTXOPool();
-        UTXO utxo = new UTXO(txG.getHash(), 0);
-        pool.addUTXO(utxo, txG.getOutput(0));
+        UTXOPool pool = createPoolWithGenesisBlock(100.00);
     }
 }

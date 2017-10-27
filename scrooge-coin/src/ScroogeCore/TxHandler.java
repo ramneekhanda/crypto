@@ -179,21 +179,6 @@ public class TxHandler {
                 pendingTxns.add(tx);
         }
 
-        //Map<ComparableTransactionInput, ArrayList<Transaction>> inputTransactionMap = getInputTransactionMap(iValidTxns);
-
-        // find out simple transactions which have inputs that appear once in the set
-//        txLoop:
-//        for (Transaction tx: iValidTxns) {
-//            for (Transaction.Input input: tx.getInputs()) {
-//                ComparableTransactionInput cti = new ComparableTransactionInput(input.prevTxHash, input.outputIndex);
-//                if (inputTransactionMap.get(cti).size() != 1) {
-//                    continue txLoop;
-//                }
-//            }
-//            mValidTxns.add(tx);
-//            iValidTxns.remove(tx);
-//        }
-
         // find out transactions which have inputs which all tally
         while (iValidTxns.size() != 0){
             Transaction tx = iValidTxns.get(0);

@@ -39,8 +39,8 @@
       <file leaf-file-name="TxHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ScroogeCore/TxHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="531">
-              <caret line="194" column="11" lean-forward="true" selection-start-line="181" selection-start-column="8" selection-end-line="194" selection-end-column="11" />
+            <state relative-caret-position="201">
+              <caret line="172" column="8" lean-forward="true" selection-start-line="172" selection-start-column="8" selection-end-line="172" selection-end-column="8" />
               <folding>
                 <element signature="e#480#481#0" expanded="true" />
                 <element signature="e#511#512#0" expanded="true" />
@@ -771,8 +771,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ScroogeCore/TxHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="194" column="11" lean-forward="true" selection-start-line="181" selection-start-column="8" selection-end-line="194" selection-end-column="11" />
+        <state relative-caret-position="201">
+          <caret line="172" column="8" lean-forward="true" selection-start-line="172" selection-start-column="8" selection-end-line="172" selection-end-column="8" />
           <folding>
             <element signature="e#480#481#0" expanded="true" />
             <element signature="e#511#512#0" expanded="true" />

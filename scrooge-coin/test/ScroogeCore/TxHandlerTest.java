@@ -208,7 +208,138 @@ class TxHandlerTest {
     }
 
     @Test
-    void handleTxs() {
+    void shouldAcceptThisTransactionWith3OutputsV2() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+
+        assert(txHandler.isValidTx(txn));
+    }
+
+    @Test
+    void shouldHandleTxnWithSameInputsTxns() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+        ArrayList<Tuple<Double, PublicKey>> outputs2 = new ArrayList<Tuple<Double, PublicKey>>();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(3)));
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(50), validPublicKeys.get(0)));
+
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+        Transaction txn1 = makeTxn(0, 0, outputs2, pk);
+        Transaction[] txns = new Transaction[2];
+        txns[0] = txn; txns[1] = txn1;
+        assert(txHandler.handleTxs(txns).length == 1);
+    }
+
+    @Test
+    void shouldHandleTxnWithSameTxnsTwice() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+        ArrayList<Tuple<Double, PublicKey>> outputs2 = new ArrayList<Tuple<Double, PublicKey>>();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+        Transaction[] txns = new Transaction[1];
+        txns[0] = txn;
+        assert(txHandler.handleTxs(txns).length == 1);
+
+        assert(txHandler.handleTxs(txns).length == 0);
+    }
+
+    @Test
+    void shouldHandleTxnWithSimpleTxnsOneAfterAnother() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+        Transaction[] txns = new Transaction[1];
+        txns[0] = txn;
+        Transaction[] tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 1);
+        assert(txHandler.getPool().getAllUTXO().size() == 2);
+
+        UTXO utxo = new UTXO(tApplied[0].getHash(), 1);
+        outputs.clear();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(60), validPublicKeys.get(0)));
+        txn = makeTxnWithUTXO(utxo, outputs, pk);
+        txns[0] = txn;
+        tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 1);
+        assert(txHandler.getPool().getAllUTXO().size() == 3);
+
+        utxo = new UTXO(tApplied[0].getHash(), 1);
+        outputs.clear();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(50), validPublicKeys.get(0)));
+        txn = makeTxnWithUTXO(utxo, outputs, pk);
+        txns[0] = txn;
+        tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 1);
+        assert(txHandler.getPool().getAllUTXO().size() == 4);
+    }
+
+    private Transaction makeTxnWithUTXO(UTXO utxo, ArrayList<Tuple<Double, PublicKey>> outputs, PrivateKey pk) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature sigInstance = Signature.getInstance("SHA256withRSA");
+        sigInstance.initSign(pk);
+
+        Transaction transaction = new Transaction();
+        for (Tuple<Double, PublicKey> output : outputs) {
+            transaction.addOutput(output.x, output.y);
+        }
+        transaction.addInput(utxo.getTxHash(), utxo.getIndex());
+
+        sigInstance.update(transaction.getRawDataToSign(0));
+        byte[] signature = sigInstance.sign();
+
+        transaction.addSignature(signature, 0);
+        transaction.finalize();
+
+        return transaction;
+    }
+
+    private Transaction makeTxn(int inputUTXO, int utxoOutputIndex, ArrayList<Tuple<Double, PublicKey>> outputs, PrivateKey pk) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature sigInstance = Signature.getInstance("SHA256withRSA");
+        sigInstance.initSign(pk);
+
+        Transaction transaction = new Transaction();
+        for (Tuple<Double, PublicKey> output : outputs) {
+            transaction.addOutput(output.x, output.y);
+        }
+        transaction.addInput(testPool.getAllUTXO().get(inputUTXO).getTxHash(), utxoOutputIndex);
+
+        sigInstance.update(transaction.getRawDataToSign(0));
+        byte[] signature = sigInstance.sign();
+
+        transaction.addSignature(signature, 0);
+        transaction.finalize();
+
+        return transaction;
+    }
+
+    public class Tuple<X, Y> {
+        public final X x;
+        public final Y y;
+        public Tuple(X x, Y y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
 }

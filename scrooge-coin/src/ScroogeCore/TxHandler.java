@@ -1,10 +1,14 @@
 package ScroogeCore;
 
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 public class TxHandler {
     UTXOPool pool;
 
+    public UTXOPool getPool() { return pool; }
     public enum ThreeState {
         TRUE,
         FALSE,
@@ -105,10 +109,13 @@ public class TxHandler {
         return ThreeState.TRUE;
     }
 
+    private static <T> BinaryOperator<ArrayList<T>> arrayListMerger() {
+        return (u,v) -> { ArrayList<T> temp = new ArrayList<>(); temp.addAll(u); temp.addAll(v); return temp; };
+    }
 
     private Map<ComparableTransactionInput, ArrayList<Transaction>> getInputTransactionMap(ArrayList<Transaction> iValidTxns) {
-        final Map<ComparableTransactionInput, ArrayList<Transaction>>[] retVal = new Map[]{null};
-        iValidTxns.stream().map(tx -> {
+
+        Map<ComparableTransactionInput, ArrayList<Transaction>> inputTxn = iValidTxns.stream().map(tx -> {
             Map<ComparableTransactionInput, ArrayList<Transaction>> inputTxMap = new HashMap<ComparableTransactionInput, ArrayList<Transaction>>();
             ArrayList<Transaction> at = new ArrayList<Transaction>();
             at.add(tx);
@@ -116,24 +123,34 @@ public class TxHandler {
                 inputTxMap.put(new ComparableTransactionInput(input.prevTxHash, input.outputIndex), at);
             }
             return inputTxMap;
-        }).reduce((reducedMap, inputTxMap) -> {
-            Set<ComparableTransactionInput> keys = inputTxMap.keySet();
-            for (ComparableTransactionInput input: keys) {
-                if (reducedMap.containsKey(input)) {
-                    ArrayList<Transaction> currTxns = reducedMap.remove(input);
-                    currTxns.addAll(inputTxMap.get(input));
-                    reducedMap.put(input, currTxns);
-                } else {
-                    reducedMap.put(input, inputTxMap.get(input));
-                }
-            }
-            return reducedMap;
-        }).ifPresent(inputTxMap -> retVal[0] = inputTxMap);
+        }).map(Map::entrySet).flatMap(Set::stream)
+                .collect(
+                        Collectors.toMap(
+                                Entry::getKey,
+                                Entry::getValue,
+                                arrayListMerger()
+                        ));
+//                collect(,
+//                (reducedMap, inputTxMap) -> {
+//                    Set<ComparableTransactionInput> keys = inputTxMap.keySet();
+//                    for (ComparableTransactionInput input : keys) {
+//                        if (reducedMap.containsKey(input)) {
+//                            ArrayList<Transaction> currTxns = reducedMap.remove(input);
+//                            currTxns.addAll(inputTxMap.get(input));
+//                            reducedMap.put(input, currTxns);
+//                        } else {
+//                            reducedMap.put(input, inputTxMap.get(input));
+//                        }
+//                    }
+//                    return reducedMap;
+//                });
 
-        return retVal[0];
+        return inputTxn;
     }
 
-    private boolean checkIfMutuallyValid(ArrayList<Transaction> goodTxnSet, Transaction tx) {
+
+
+    private boolean checkIfMutuallyValid(ArrayList<Transaction> goodTxnSet, Transaction tx, UTXOPool pool) {
         double sumOfInputVals = 0.0, sumOfOutputVals = 0.0;
         goodTxnSet.add(tx);
         Map<ComparableTransactionInput, ArrayList<Transaction>> inputTransactionMap = getInputTransactionMap(goodTxnSet);
@@ -179,10 +196,9 @@ public class TxHandler {
                 pendingTxns.add(tx);
         }
 
-        // find out transactions which have inputs which all tally
-        while (iValidTxns.size() != 0){
+        while (iValidTxns.size() != 0) {
             Transaction tx = iValidTxns.get(0);
-            if (checkIfMutuallyValid(mValidTxns, tx)) {
+            if (checkIfMutuallyValid(new ArrayList<>(mValidTxns), tx, pool)) {
                 mValidTxns.add(tx);
                 iValidTxns.remove(0);
             } else {
@@ -191,7 +207,23 @@ public class TxHandler {
             }
         }
 
-        return null;
+        for (Transaction txn : mValidTxns) {
+            for (Transaction.Input input : txn.getInputs()) { // remove utxos that have been spent
+                UTXO lastUTXO = new UTXO(input.prevTxHash, input.outputIndex);
+                tempPool.removeUTXO(lastUTXO);
+            }
+            int idx = 0;
+            for (Transaction.Output out : txn.getOutputs()) {
+                UTXO utxo = new UTXO(txn.getHash(), idx);
+                tempPool.addUTXO(utxo, out);
+                idx++;
+            }
+        }
+
+        pool = tempPool;
+        Transaction[] retVal = new Transaction[mValidTxns.size()];
+        retVal = mValidTxns.toArray(retVal);
+        return retVal;
     }
 
 
@@ -207,8 +239,8 @@ public class TxHandler {
             outputIndex = index;
         }
 
-        public boolean equals(ComparableTransactionInput other) {
-            if (other != null && Arrays.equals(other.prevTxHash, prevTxHash) && other.outputIndex == outputIndex)
+        public boolean equals(Object other) {
+            if (other != null && Arrays.equals(((ComparableTransactionInput)other).prevTxHash, prevTxHash) && ((ComparableTransactionInput)other).outputIndex == outputIndex)
                 return true;
             else
                 return false;
@@ -217,7 +249,6 @@ public class TxHandler {
         public int hashCode() {
             int sum = outputIndex;
             for (byte b: prevTxHash) sum += b;
-
             return sum;
         }
     }

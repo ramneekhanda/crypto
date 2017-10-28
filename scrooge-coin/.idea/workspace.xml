@@ -29,8 +29,8 @@
       <file leaf-file-name="TxHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ScroogeCore/TxHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="45" lean-forward="false" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+            <state relative-caret-position="435">
+              <caret line="198" column="0" lean-forward="false" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#633#634#0" expanded="true" />
@@ -45,8 +45,8 @@
       <file leaf-file-name="TxHandlerTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/ScroogeCore/TxHandlerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2396">
-              <caret line="277" column="53" lean-forward="false" selection-start-line="277" selection-start-column="53" selection-end-line="277" selection-end-column="53" />
+            <state relative-caret-position="270">
+              <caret line="322" column="61" lean-forward="true" selection-start-line="322" selection-start-column="61" selection-end-line="322" selection-end-column="61" />
               <folding>
                 <element signature="e#8643#8669#0" expanded="true" />
                 <element signature="e#9279#9305#0" expanded="true" />
@@ -54,6 +54,8 @@
                 <element signature="e#10353#10379#0" expanded="true" />
                 <element signature="e#10451#10477#0" expanded="true" />
                 <element signature="e#11238#11264#0" expanded="true" />
+                <element signature="e#13546#13572#0" expanded="true" />
+                <element signature="e#14523#14549#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -250,59 +252,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother">
-    <configuration default="false" name="TxHandlerTest.shouldHandleTxnWithTwoTxns" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="ScroogeCore.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="scrooge-coin" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="ScroogeCore" />
-      <option name="MAIN_CLASS_NAME" value="ScroogeCore.TxHandlerTest" />
-      <option name="METHOD_NAME" value="shouldHandleTxnWithTwoTxns" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="TxHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="ScroogeCore.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="scrooge-coin" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="ScroogeCore" />
-      <option name="MAIN_CLASS_NAME" value="ScroogeCore.TxHandlerTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.TxHandlerTest.shouldHandleTxnWithMultipleValidTxns">
     <configuration default="false" name="TxHandlerTest.shouldHandleTxnWithSameInputsTxns" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -368,6 +318,53 @@
       <option name="PACKAGE_NAME" value="ScroogeCore" />
       <option name="MAIN_CLASS_NAME" value="ScroogeCore.TxHandlerTest" />
       <option name="METHOD_NAME" value="shouldHandleTxnWithSimpleTxnsOneAfterAnother" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="All in scrooge-coin" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="scrooge-coin" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="ScroogeCore.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="scrooge-coin" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="ScroogeCore" />
+      <option name="MAIN_CLASS_NAME" value="ScroogeCore.TxHandlerTest" />
+      <option name="METHOD_NAME" value="shouldHandleTxnWithMultipleValidTxns" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -586,19 +583,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithTwoTxns" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.TxHandlerTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSameInputsTxns" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsTwice" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSameInputsTxns" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsTwice" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.All in scrooge-coin" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsTwice" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSameInputsTxns" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithTwoTxns" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.TxHandlerTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.All in scrooge-coin" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSimpleTxnsTwice" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TxHandlerTest.shouldHandleTxnWithSameInputsTxns" />
       </list>
     </recent_temporary>
   </component>
@@ -616,35 +613,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 32m 27s.xml">
+    <history-entry file="All_in_scrooge-coin - 2017.10.28 at 15h 53m 01s.xml">
+      <configuration name="All in scrooge-coin" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithMultipleValidTxns - 2017.10.28 at 16h 11m 26s.xml">
+      <configuration name="TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithMultipleValidTxns - 2017.10.28 at 16h 14m 46s.xml">
+      <configuration name="TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithMultipleValidTxns - 2017.10.28 at 16h 14m 58s.xml">
+      <configuration name="TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithMultipleValidTxns - 2017.10.28 at 16h 15m 05s.xml">
+      <configuration name="TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithMultipleValidTxns - 2017.10.28 at 16h 15m 16s.xml">
+      <configuration name="TxHandlerTest.shouldHandleTxnWithMultipleValidTxns" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 48m 57s.xml">
       <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 33m 25s.xml">
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 49m 59s.xml">
       <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 33m 36s.xml">
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 51m 43s.xml">
       <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 33m 54s.xml">
+    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 16h 15m 01s.xml">
       <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 34m 01s.xml">
-      <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 34m 11s.xml">
-      <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 34m 19s.xml">
-      <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 35m 30s.xml">
-      <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsOneAfterAnother - 2017.10.28 at 15h 39m 53s.xml">
-      <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsOneAfterAnother" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TxHandlerTest_shouldHandleTxnWithSimpleTxnsTwice - 2017.10.28 at 15h 29m 52s.xml">
-      <configuration name="TxHandlerTest.shouldHandleTxnWithSimpleTxnsTwice" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
@@ -688,19 +685,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ScroogeCore/TxHandler.java</url>
-          <line>23</line>
-          <properties />
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/test/ScroogeCore/TxHandlerTest.java</url>
-          <line>260</line>
+          <line>340</line>
           <properties />
-          <option name="timeStamp" value="12" />
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -851,8 +842,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ScroogeCore/TxHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="45" lean-forward="false" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+        <state relative-caret-position="435">
+          <caret line="198" column="0" lean-forward="false" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#633#634#0" expanded="true" />
@@ -865,8 +856,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/ScroogeCore/TxHandlerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2396">
-          <caret line="277" column="53" lean-forward="false" selection-start-line="277" selection-start-column="53" selection-end-line="277" selection-end-column="53" />
+        <state relative-caret-position="270">
+          <caret line="322" column="61" lean-forward="true" selection-start-line="322" selection-start-column="61" selection-end-line="322" selection-end-column="61" />
           <folding>
             <element signature="e#8643#8669#0" expanded="true" />
             <element signature="e#9279#9305#0" expanded="true" />
@@ -874,6 +865,8 @@
             <element signature="e#10353#10379#0" expanded="true" />
             <element signature="e#10451#10477#0" expanded="true" />
             <element signature="e#11238#11264#0" expanded="true" />
+            <element signature="e#13546#13572#0" expanded="true" />
+            <element signature="e#14523#14549#0" expanded="true" />
           </folding>
         </state>
       </provider>

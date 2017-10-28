@@ -114,7 +114,6 @@ public class TxHandler {
     }
 
     private Map<ComparableTransactionInput, ArrayList<Transaction>> getInputTransactionMap(ArrayList<Transaction> iValidTxns) {
-
         Map<ComparableTransactionInput, ArrayList<Transaction>> inputTxn = iValidTxns.stream().map(tx -> {
             Map<ComparableTransactionInput, ArrayList<Transaction>> inputTxMap = new HashMap<ComparableTransactionInput, ArrayList<Transaction>>();
             ArrayList<Transaction> at = new ArrayList<Transaction>();
@@ -130,46 +129,16 @@ public class TxHandler {
                                 Entry::getValue,
                                 arrayListMerger()
                         ));
-//                collect(,
-//                (reducedMap, inputTxMap) -> {
-//                    Set<ComparableTransactionInput> keys = inputTxMap.keySet();
-//                    for (ComparableTransactionInput input : keys) {
-//                        if (reducedMap.containsKey(input)) {
-//                            ArrayList<Transaction> currTxns = reducedMap.remove(input);
-//                            currTxns.addAll(inputTxMap.get(input));
-//                            reducedMap.put(input, currTxns);
-//                        } else {
-//                            reducedMap.put(input, inputTxMap.get(input));
-//                        }
-//                    }
-//                    return reducedMap;
-//                });
-
         return inputTxn;
     }
 
-
-
     private boolean checkIfMutuallyValid(ArrayList<Transaction> goodTxnSet, Transaction tx, UTXOPool pool) {
-        double sumOfInputVals = 0.0, sumOfOutputVals = 0.0;
         goodTxnSet.add(tx);
         Map<ComparableTransactionInput, ArrayList<Transaction>> inputTransactionMap = getInputTransactionMap(goodTxnSet);
 
         for (ComparableTransactionInput input : inputTransactionMap.keySet()) {
-            UTXO lastUTXO = new UTXO(input.prevTxHash, input.outputIndex);
-            Transaction.Output prevTx = pool.getTxOutput(lastUTXO);
-            sumOfInputVals += prevTx.value;
+            if (inputTransactionMap.get(input).size() > 1) return false;
         }
-
-        for (Transaction gTxn : goodTxnSet) {
-            for (Transaction.Output output: gTxn.getOutputs()) {
-                sumOfOutputVals += output.value;
-            }
-        }
-
-        if (sumOfInputVals < sumOfOutputVals)
-            return false;
-
         return true;
     }
 
@@ -221,11 +190,24 @@ public class TxHandler {
         }
 
         pool = tempPool;
+
+        while (pendingTxns.size() > 0 && mValidTxns.size() > 0) { // check new transactions in the new pool.. apply if can
+            Transaction[] pendingTx = new Transaction[pendingTxns.size()];
+            pendingTx = pendingTxns.toArray(pendingTx);
+            Transaction[] txnPendingCorrect = this.handleTxs(pendingTx);
+
+            if (txnPendingCorrect.length == 0) {
+                break;
+            } else {
+                pendingTxns.removeAll(Arrays.asList(txnPendingCorrect));
+                mValidTxns.addAll(Arrays.asList(txnPendingCorrect));
+            }
+        }
         Transaction[] retVal = new Transaction[mValidTxns.size()];
         retVal = mValidTxns.toArray(retVal);
+
         return retVal;
     }
-
 
     private class ComparableTransactionInput {
         public byte[] prevTxHash;

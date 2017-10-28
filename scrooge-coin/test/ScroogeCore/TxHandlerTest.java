@@ -252,7 +252,6 @@ class TxHandlerTest {
         Transaction[] txns = new Transaction[1];
         txns[0] = txn;
         assert(txHandler.handleTxs(txns).length == 1);
-
         assert(txHandler.handleTxs(txns).length == 0);
     }
 
@@ -331,16 +330,163 @@ class TxHandlerTest {
 
         ArrayList<Tuple<Double, PublicKey>> outputs2 = new ArrayList<Tuple<Double, PublicKey>>();
         utxo = new UTXO(tApplied[0].getHash(), 0);
-        outputs2.add(new Tuple<Double, PublicKey>(new Double(5), validPublicKeys.get(1)));
-        outputs2.add(new Tuple<Double, PublicKey>(new Double(5), validPublicKeys.get(0)));
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(1)));
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(0)));
         Transaction txn1 = makeTxnWithUTXO(utxo, outputs2, validKeyPairs.get(validPublicKeys.get(1)));
 
-        txns = new Transaction[2];
-        txns[0] = txn; txns[1] = txn1;
+        ArrayList<Tuple<Double, PublicKey>> outputs3 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(tApplied[0].getHash(), 0);
+        outputs3.add(new Tuple<Double, PublicKey>(new Double(3), validPublicKeys.get(1)));
+        outputs3.add(new Tuple<Double, PublicKey>(new Double(3), validPublicKeys.get(0)));
+        Transaction txn2 = makeTxnWithUTXO(utxo, outputs2, validKeyPairs.get(validPublicKeys.get(1)));
+
+        txns = new Transaction[3];
+        txns[0] = txn; txns[1] = txn1; txns[2] = txn2;
 
         tApplied = txHandler.handleTxs(txns);
 
         assert(tApplied.length == 2);
+        System.out.print(txHandler.getPool().getAllUTXO().size());
+        assert(txHandler.getPool().getAllUTXO().size() == 4);
+    }
+
+    @Test
+    void shouldHandleTxnWithMultipleValidTxnsAndOneDependantTxn() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+        Transaction[] txns = new Transaction[1];
+        txns[0] = txn;
+        Transaction[] tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 1);
+        assert(txHandler.getPool().getAllUTXO().size() == 2);
+
+        // now make 4 coins
+        UTXO utxo = new UTXO(tApplied[0].getHash(), 1);
+        outputs.clear();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(5), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(75), validPublicKeys.get(0)));
+        txn = makeTxnWithUTXO(utxo, outputs, pk);
+
+        ArrayList<Tuple<Double, PublicKey>> outputs2 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(tApplied[0].getHash(), 0);
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(1)));
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(0)));
+        Transaction txn1 = makeTxnWithUTXO(utxo, outputs2, validKeyPairs.get(validPublicKeys.get(1)));
+
+        ArrayList<Tuple<Double, PublicKey>> outputs3 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(txn1.getHash(), 1);
+        outputs3.add(new Tuple<Double, PublicKey>(new Double(1), validPublicKeys.get(1)));
+        Transaction txn2 = makeTxnWithUTXO(utxo, outputs3, validKeyPairs.get(validPublicKeys.get(0)));
+
+        txns = new Transaction[3];
+        txns[0] = txn; txns[1] = txn1; txns[2] = txn2;
+
+        tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 3);
+        System.out.print(txHandler.getPool().getAllUTXO().size());
+        assert(txHandler.getPool().getAllUTXO().size() == 4);
+    }
+
+    @Test
+    void shouldHandleTxnWithMultipleValidTxnsAndTwoDependantTxn() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+        Transaction[] txns = new Transaction[1];
+        txns[0] = txn;
+        Transaction[] tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 1);
+        assert(txHandler.getPool().getAllUTXO().size() == 2);
+
+        // now make 4 coins
+        UTXO utxo = new UTXO(tApplied[0].getHash(), 1);
+        outputs.clear();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(5), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(75), validPublicKeys.get(0)));
+        txn = makeTxnWithUTXO(utxo, outputs, pk);
+
+        ArrayList<Tuple<Double, PublicKey>> outputs2 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(tApplied[0].getHash(), 0);
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(1)));
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(0)));
+        Transaction txn1 = makeTxnWithUTXO(utxo, outputs2, validKeyPairs.get(validPublicKeys.get(1)));
+
+        ArrayList<Tuple<Double, PublicKey>> outputs3 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(txn1.getHash(), 1);
+        outputs3.add(new Tuple<Double, PublicKey>(new Double(1), validPublicKeys.get(1)));
+        Transaction txn2 = makeTxnWithUTXO(utxo, outputs3, validKeyPairs.get(validPublicKeys.get(0)));
+
+        ArrayList<Tuple<Double, PublicKey>> outputs4 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(txn1.getHash(), 0);
+        outputs4.add(new Tuple<Double, PublicKey>(new Double(1), validPublicKeys.get(0)));
+        Transaction txn3 = makeTxnWithUTXO(utxo, outputs4, validKeyPairs.get(validPublicKeys.get(1)));
+
+        txns = new Transaction[4];
+        txns[0] = txn; txns[1] = txn1; txns[2] = txn2; txns[3] = txn3;
+
+        tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 4);
+        assert(txHandler.getPool().getAllUTXO().size() == 4);
+    }
+
+    @Test
+    void shouldHandleTxnWithMultipleValidTxnsAndTwoLevelDependantTxn() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        TxHandler txHandler = new TxHandler(testPool);
+        ArrayList<Tuple<Double, PublicKey>> outputs = new ArrayList<Tuple<Double, PublicKey>>();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(10), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(80), validPublicKeys.get(0)));
+
+        PrivateKey pk = validKeyPairs.get(validPublicKeys.get(0));
+        Transaction txn = makeTxn(0, 0, outputs, pk);
+        Transaction[] txns = new Transaction[1];
+        txns[0] = txn;
+        Transaction[] tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 1);
+        assert(txHandler.getPool().getAllUTXO().size() == 2);
+
+        // now make 4 coins
+        UTXO utxo = new UTXO(tApplied[0].getHash(), 1);
+        outputs.clear();
+        outputs.add(new Tuple<Double, PublicKey>(new Double(5), validPublicKeys.get(1)));
+        outputs.add(new Tuple<Double, PublicKey>(new Double(75), validPublicKeys.get(0)));
+        txn = makeTxnWithUTXO(utxo, outputs, pk);
+
+        ArrayList<Tuple<Double, PublicKey>> outputs2 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(tApplied[0].getHash(), 0);
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(1)));
+        outputs2.add(new Tuple<Double, PublicKey>(new Double(2), validPublicKeys.get(0)));
+        Transaction txn1 = makeTxnWithUTXO(utxo, outputs2, validKeyPairs.get(validPublicKeys.get(1)));
+
+        ArrayList<Tuple<Double, PublicKey>> outputs3 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(txn1.getHash(), 1);
+        outputs3.add(new Tuple<Double, PublicKey>(new Double(1), validPublicKeys.get(1)));
+        Transaction txn2 = makeTxnWithUTXO(utxo, outputs3, validKeyPairs.get(validPublicKeys.get(0)));
+
+        ArrayList<Tuple<Double, PublicKey>> outputs4 = new ArrayList<Tuple<Double, PublicKey>>();
+        utxo = new UTXO(txn2.getHash(), 0);
+        outputs4.add(new Tuple<Double, PublicKey>(new Double(0.5), validPublicKeys.get(0)));
+        Transaction txn3 = makeTxnWithUTXO(utxo, outputs4, validKeyPairs.get(validPublicKeys.get(1)));
+
+        txns = new Transaction[4];
+        txns[0] = txn; txns[1] = txn1; txns[2] = txn2; txns[3] = txn3;
+
+        tApplied = txHandler.handleTxs(txns);
+
+        assert(tApplied.length == 4);
         assert(txHandler.getPool().getAllUTXO().size() == 4);
     }
 
